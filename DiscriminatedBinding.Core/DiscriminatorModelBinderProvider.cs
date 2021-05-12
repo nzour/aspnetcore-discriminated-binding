@@ -41,7 +41,7 @@ namespace DiscriminatedBinding.Core
 
             if (!cases.Any())
             {
-                throw new Exception("No implemented yet"); // todo: exception   
+                throw new NoDiscriminatorCasesProvidedException(modelType);   
             }
 
             // todo: here we should read value from request and find out what implementation from case we should use
