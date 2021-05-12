@@ -19,14 +19,22 @@ namespace DiscriminatedBinding.Core
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var modelAttributes = context.Metadata.ModelType.GetCustomAttributes(inherit: false);
+            var modelType = context.Metadata.ModelType;
+
+            if (null == modelType)
+            {
+                // Returning null means go and try other IModelBinderProvider
+                // Model type should be preset
+                return null;
+            }
+
+            var modelAttributes = modelType.GetCustomAttributes(inherit: false);
 
             var discriminator = Fn.FindDiscriminator(modelAttributes);
             var cases = Fn.FilterDiscriminatorCases(modelAttributes).ToList();
 
             if (null == discriminator)
             {
-                // Returning null means go and try other IModelBinderProvider
                 // If discriminator attribute not preset, then we do nothing
                 return null;
             }
