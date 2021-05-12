@@ -5,13 +5,14 @@ using DiscriminatedBinding.Core.Attributes;
 using DiscriminatedBinding.Core.Exceptions;
 using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace DiscriminatedBinding.Core
 {
-    // todo find out the way to determine decorated binder and inject in into ctor.
+    // todo find out the way to determine decorated binder and inject it into ctor.
     public class DiscriminatorModelBinderProvider : IModelBinderProvider
     {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
+        public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
             if (context == null)
             {
@@ -25,7 +26,9 @@ namespace DiscriminatedBinding.Core
 
             if (null == discriminator)
             {
-                throw new DiscriminatorException("No implemented yet"); // todo: exception
+                // Returning null means go and try other IModelBinderProvider
+                // If discriminator attribute not preset, then we do nothing
+                return null;
             }
 
             if (!cases.Any())
