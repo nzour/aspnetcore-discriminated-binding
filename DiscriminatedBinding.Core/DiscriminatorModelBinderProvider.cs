@@ -55,7 +55,7 @@ namespace DiscriminatedBinding.Core
                 throw new NoDiscriminatorCasesProvidedException(modelType);   
             }
 
-            var reader = CreateDiscriminatorReader(context.BindingInfo.BindingSource);
+            var reader = CreateDiscriminatorReader(_mvcOptions, context.MetadataProvider, context.BindingInfo.BindingSource);
 
             if (null == reader)
             {
@@ -67,11 +67,19 @@ namespace DiscriminatedBinding.Core
             return new DiscriminatorModelBinder(factory, context.MetadataProvider, discriminator, cases, reader);
         }
 
-        private static IDiscriminatorReader? CreateDiscriminatorReader(BindingSource source)
+        private static IDiscriminatorReader? CreateDiscriminatorReader(
+            IOptions<MvcOptions> mvcOptions,
+            IModelMetadataProvider metadataProvider,
+            BindingSource source
+        )
         {
             return source.Id switch
             {
-                BodyBindingSource => new BodyDiscriminatorReader(),
+                BodyBindingSource => new BodyDiscriminatorReader(
+                    formatters: mvcOptions.Value.InputFormatters,
+                    metadataProvider: metadataProvider,
+                    mvcOptions.Value.AllowEmptyInputInBodyModelBinding
+                ),
                 FormBindingSource => new FormDiscriminatorReader(),
                 QueryBindingSource => new QueryDiscriminatorReader(),
                 HeaderBindingSource => new HeaderDiscriminatorReader(),
