@@ -1,8 +1,9 @@
 using System;
+using static System.AttributeTargets;
 
 namespace DiscriminatedBinding.Core.Attributes
 {
-    [AttributeUsage(validOn: AttributeTargets.Class, AllowMultiple = true)]
+    [AttributeUsage(validOn: Class | Interface | Struct, AllowMultiple = true)]
     public class DiscriminatorCaseAttribute : Attribute
     {
         public string Key { get; }
