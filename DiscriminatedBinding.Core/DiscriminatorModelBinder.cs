@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DiscriminatedBinding.Core.Attributes;
@@ -6,7 +5,6 @@ using DiscriminatedBinding.Core.Exceptions;
 using DiscriminatedBinding.Core.Reader;
 using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
 namespace DiscriminatedBinding.Core
 {
