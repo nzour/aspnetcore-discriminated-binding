@@ -15,7 +15,6 @@ namespace DiscriminatedBinding.Core
         private const string FormBindingSource = "Form";
         private const string QueryBindingSource = "Query";
         private const string HeaderBindingSource = "Header";
-        private const string PathBindingSource = "Path";
 
         private readonly IOptions<MvcOptions> _mvcOptions;
 
@@ -76,7 +75,6 @@ namespace DiscriminatedBinding.Core
                 FormBindingSource => new FormDiscriminatorReader(),
                 QueryBindingSource => new QueryDiscriminatorReader(),
                 HeaderBindingSource => new HeaderDiscriminatorReader(),
-                PathBindingSource => new PathDiscriminatorReader(),
                 _ => null,
             };
         }
