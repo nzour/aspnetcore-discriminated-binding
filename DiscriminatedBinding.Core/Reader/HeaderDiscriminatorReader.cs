@@ -8,7 +8,13 @@ namespace DiscriminatedBinding.Core.Reader
     {
         public Task<string?> ReadDiscriminatorAsync(string property, HttpContext context)
         {
-            throw new NotImplementedException();
+            var headers = context.Request.Headers;
+
+            return Task.FromResult(
+                headers.TryGetValue(property, out var discriminatorValue)
+                    ? discriminatorValue.ToString()
+                    : null
+            );
         }
     }
 }
