@@ -3,7 +3,9 @@ using System.Linq;
 using DiscriminatedBinding.Core.Exceptions;
 using DiscriminatedBinding.Core.Reader;
 using DiscriminatedBinding.Core.Utility;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 
 namespace DiscriminatedBinding.Core
 {
@@ -14,6 +16,13 @@ namespace DiscriminatedBinding.Core
         private const string QueryBindingSource = "Query";
         private const string HeaderBindingSource = "Header";
         private const string PathBindingSource = "Path";
+
+        private readonly IOptions<MvcOptions> _mvcOptions;
+
+        public DiscriminatorModelBinderProvider(IOptions<MvcOptions> mvcOptions)
+        {
+            _mvcOptions = mvcOptions;
+        }
 
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
         {
@@ -49,9 +58,14 @@ namespace DiscriminatedBinding.Core
 
             var reader = CreateDiscriminatorReader(context.BindingInfo.BindingSource);
 
-            return null == reader
-                ? null
-                : new DiscriminatorModelBinder(discriminator, cases, reader);
+            if (null == reader)
+            {
+                return null;
+            }
+
+            var factory = new ModelBinderFactory(context.MetadataProvider, _mvcOptions, context.Services);
+
+            return new DiscriminatorModelBinder(factory, context.MetadataProvider, discriminator, cases, reader);
         }
 
         private static IDiscriminatorReader? CreateDiscriminatorReader(BindingSource source)
