@@ -1,4 +1,6 @@
+using System.Linq;
 using System.Threading.Tasks;
+using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Http;
 
 namespace DiscriminatedBinding.Core.Reader
@@ -10,9 +12,13 @@ namespace DiscriminatedBinding.Core.Reader
             var headers = context.Request.Headers;
 
             return Task.FromResult(
-                headers.TryGetValue(property, out var discriminatorValue)
-                    ? discriminatorValue.ToString()
-                    : null
+                Fn.GenerateAllPropertyVariates(property)
+                    .Select(it => 
+                        headers.TryGetValue(it, out var discriminatorValue)
+                            ? discriminatorValue.ToString()
+                            : null
+                    )
+                    .FirstOrDefault(it => null != it)
             );
         }
     }
