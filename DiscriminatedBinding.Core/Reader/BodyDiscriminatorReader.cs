@@ -38,7 +38,7 @@ namespace DiscriminatedBinding.Core.Reader
             // If we use FileBufferingReadStream (see context.Request.EnableBuffering()) https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.webutilities.filebufferingreadstream?view=aspnetcore-5.0
             // then Newtonsoft's input formatter always disposes it.
             //
-            // If we will use default tream, then Newtonsoft's input formatter will create FileBufferingReadStream and then dispose.
+            // If we will use default stream, then Newtonsoft's input formatter will create FileBufferingReadStream and then dispose.
             // But we need to read several times from Stream, so we need seakable stream (in case to rewind it)
             // That's why we need to copy default stream (actually is instance of HttpRequestStream) to any other seakable stream
             // Warning: maybe not memory safe - if body is too large.
