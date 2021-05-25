@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DiscriminatedBinding.Core.Exceptions;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -70,38 +72,50 @@ namespace DiscriminatedBinding.Core.Reader
             // rewinding stream
             context.Request.Body.Position = 0;
 
-            return formattingResult.Model switch
+            Func<string, string?>? resolvingFunction = formattingResult.Model switch
             {
                 // System.Text.Json
-                JsonElement jsonText => HandleJsonTextResult(jsonText, property),
+                JsonElement jsonText => CreateResolvingFuncForJsonElement(jsonText),
 
                 // Newtonsoft.Json
-                JObject jObject => HandleNewtonSoftJsonResult(jObject, property),
+                JObject jObject => jObject.Value<string>,
 
                 // Others not supported yet 
                 _ => null
             };
+
+            if (null == resolvingFunction)
+            {
+                return null;
+            }
+
+            return GenerateAllPropertyVariates(property)
+                .Select(prop => resolvingFunction(prop))
+                .FirstOrDefault(resolved => null != resolved);
         }
 
-        private static string? HandleJsonTextResult(JsonElement json, string property)
+        private static Func<string, string?> CreateResolvingFuncForJsonElement(JsonElement json)
         {
-            // fixme not working if property name defined in Pascal case and actual is camel case etc...
-
-            if (json.TryGetProperty(property, out var value))
+            return property =>
             {
-                if (value.ValueKind == JsonValueKind.String)
+                if (json.TryGetProperty(property, out var value) && value.ValueKind == JsonValueKind.String)
                 {
                     return value.ToString();
                 }
-            }
 
-            return null;
+                return null;
+            };
         }
 
-        private static string? HandleNewtonSoftJsonResult(JObject jObject, string property)
+        private static IEnumerable<string> GenerateAllPropertyVariates(string property)
         {
-            // fixme support different naming strategies
-            return jObject.Value<string>(property);
+            yield return property;
+
+            var trimmed = property.Trim();
+
+            yield return trimmed.Camelize();
+            yield return trimmed.Pascalize();
+            yield return trimmed.Underscore();
         }
     }
 }
