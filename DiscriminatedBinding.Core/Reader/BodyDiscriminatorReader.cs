@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DiscriminatedBinding.Core.Exceptions;
-using Humanizer;
+using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -89,7 +89,7 @@ namespace DiscriminatedBinding.Core.Reader
                 return null;
             }
 
-            return GenerateAllPropertyVariates(property)
+            return Fn.GenerateAllPropertyVariates(property)
                 .Select(prop => resolvingFunction(prop))
                 .FirstOrDefault(resolved => null != resolved);
         }
@@ -105,17 +105,6 @@ namespace DiscriminatedBinding.Core.Reader
 
                 return null;
             };
-        }
-
-        private static IEnumerable<string> GenerateAllPropertyVariates(string property)
-        {
-            yield return property;
-
-            var trimmed = property.Trim();
-
-            yield return trimmed.Camelize();
-            yield return trimmed.Pascalize();
-            yield return trimmed.Underscore();
         }
     }
 }

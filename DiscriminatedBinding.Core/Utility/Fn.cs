@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DiscriminatedBinding.Core.Attributes;
+using Humanizer;
 
 namespace DiscriminatedBinding.Core.Utility
 {
@@ -25,5 +26,17 @@ namespace DiscriminatedBinding.Core.Utility
                 .Where(it => it is DiscriminatorCaseAttribute)
                 .Cast<DiscriminatorCaseAttribute>();
         }
+
+        public static IEnumerable<string> GenerateAllPropertyVariates(string property)
+        {
+            yield return property;
+
+            var trimmed = property.Trim();
+
+            yield return trimmed;
+            yield return trimmed.Camelize();
+            yield return trimmed.Pascalize();
+            yield return trimmed.Underscore();
+        }   
     }
 }
