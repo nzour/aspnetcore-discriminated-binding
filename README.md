@@ -25,22 +25,20 @@ services.AddControllers()
 
 ### Doc
 
-`DiscriminatorAttribute` defines property to read discriminator value from (see example below)
+`DiscriminatorAttribute` defines property to read discriminator value from (see example below).
 
-`DiscriminatorCaseAttibute` defines which instance should be associated with discriminator value
+`DiscriminatorCaseAttibute` defines which instance should be associated with discriminator value.
 
-The only requirement is that at least one `DiscriminatorCaseAttibute` should be defined.  
+The only requirement is that at least one `DiscriminatorCaseAttibute` should be defined.
 
 #### What if we define multiple attribute with same values?
 If few `DiscriminatorAttribute` was defined, then:
-
-No runtime errors.
-
-The first found one would be used.
+- No runtime errors.
+- The first found one would be used.
 
 If `DiscriminatorCaseAttibute`:
 
-Actually, we generate dictionary (`<discriminator value>` to `<instance type>`)
+Actually, we generate dictionary (`<discriminator value>` to `<instance type>`).
 
 So, the duplicated value would just override previous one
 
@@ -65,7 +63,7 @@ So, the duplicated value would just override previous one
 [Discriminator(property: "type")]
 [DiscriminatorCase(when: "github", then: typeof(GithubRepository))]
 [DiscriminatorCase(when: "gitlab", then: typeof(GitlabRepository))]
-public interface IRepository
+public interface IRepository // this also may be common class or abstract class
 {
     // the 'type' property may not be defined at all
 }
