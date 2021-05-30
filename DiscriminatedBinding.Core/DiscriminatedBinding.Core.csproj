@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>DiscriminatedBinding</PackageId>
-    <Version>1.0-alpha</Version>
+    <Version>1.0.1-alpha</Version>
     <Title>Discriminated Binding for Aspnet Core</Title>
     <PackageProjectUrl>https://github.com/nzour/aspnetcore-discriminated-binding</PackageProjectUrl>
     <Authors>Zaur</Authors>
