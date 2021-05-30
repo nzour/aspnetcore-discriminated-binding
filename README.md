@@ -5,7 +5,7 @@ Aspnet Core Discriminated Binding.
 ### Installation 
 
 ```console
-$ dotnet add ...
+$ dotnet add package DiscriminatedBinding
 ```
 
 ---
@@ -129,7 +129,7 @@ for gitlab:
   
   Internally, library would try to convert it to camelCase, PascalCase and underscored. 
   
-  So, I if we want to extend it and try another naming strategy - we have to change source code, so it would be nice to refactor and make this feature more extendable. 
+  So, if we want to extend it and try another naming strategy - we have to change source code, so it would be nice to refactor and make this feature more extendable. 
 
 - If we want to support another binding source (Body, Query, Header, etc), we have to change source code, this is also should not be this way.
 
