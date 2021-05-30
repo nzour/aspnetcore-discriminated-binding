@@ -5,7 +5,7 @@ Aspnet Core Discriminated Binding.
 ### Installation 
 
 ```console
-$ dotnet add ...
+$ dotnet add package DiscriminatedBinding
 ```
 
 ---
