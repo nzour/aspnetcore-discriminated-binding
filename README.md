@@ -115,7 +115,9 @@ for gitlab:
 ### Not supported / Implementation required
 - Unit tests
 - Functional tests
-- Enum as discriminator
+- ~~Enum as discriminator~~ 
+
+    There is no perfect solution [follow #1 issue for more information](https://github.com/nzour/aspnetcore-discriminated-binding/issues/1)
 - Support .Net Core 3.1 and .Net 5
 - Parsing from `Body` supports only if we use `System.Text.Json` or `Newtonsoft.Json` input formatters.
 
