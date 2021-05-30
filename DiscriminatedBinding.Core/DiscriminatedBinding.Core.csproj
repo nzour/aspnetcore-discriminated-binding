@@ -1,6 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <PackageId>DiscriminatedBinding</PackageId>
+    <Version>1.0-alpha</Version>
+    <Title>Discriminated Binding for Aspnet Core</Title>
+    <PackageProjectUrl>https://github.com/nzour/aspnetcore-discriminated-binding</PackageProjectUrl>
+    <Authors>Zaur</Authors>
+    <Company>TeamLead</Company>
     <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
     <TargetFramework>netcoreapp3.0</TargetFramework>
