@@ -15,13 +15,15 @@ namespace DiscriminatedBinding.Core
         private readonly DiscriminatorAttribute _discriminator;
         private readonly IList<DiscriminatorCaseAttribute> _cases;
         private readonly IDiscriminatorReader _reader;
+        private readonly IPropertyNamingStrategy _propertyNamingStrategy;
 
         public DiscriminatorModelBinder(
             IModelBinderFactory factory,
             IModelMetadataProvider metadataProvider,
             DiscriminatorAttribute discriminator,
             IList<DiscriminatorCaseAttribute> cases,
-            IDiscriminatorReader reader
+            IDiscriminatorReader reader,
+            IPropertyNamingStrategy propertyNamingStrategy
         )
         {
             _factory = factory;
@@ -29,11 +31,13 @@ namespace DiscriminatedBinding.Core
             _discriminator = discriminator;
             _cases = cases;
             _reader = reader;
+            _propertyNamingStrategy = propertyNamingStrategy;
         }
 
         public async Task BindModelAsync(ModelBindingContext bindingContext)
         {
-            var actualDiscriminatorValue = await _reader.ReadDiscriminatorAsync(_discriminator.Property, bindingContext.HttpContext);
+            var property = _propertyNamingStrategy.ConvertPropertyName(_discriminator.Property.Trim());
+            var actualDiscriminatorValue = await _reader.ReadDiscriminatorAsync(property, bindingContext.HttpContext);
 
             if (null == actualDiscriminatorValue)
             {

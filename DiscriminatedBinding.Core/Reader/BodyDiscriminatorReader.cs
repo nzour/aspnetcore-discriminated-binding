@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using DiscriminatedBinding.Core.Exceptions;
-using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -84,14 +83,7 @@ namespace DiscriminatedBinding.Core.Reader
                 _ => null
             };
 
-            if (null == resolvingFunction)
-            {
-                return null;
-            }
-
-            return Fn.GenerateAllPropertyVariates(property)
-                .Select(prop => resolvingFunction(prop))
-                .FirstOrDefault(resolved => null != resolved);
+            return resolvingFunction?.Invoke(property);
         }
 
         private static Func<string, string?> CreateResolvingFuncForJsonElement(JsonElement json)

@@ -17,10 +17,12 @@ namespace DiscriminatedBinding.Core
         private const string HeaderBindingSource = "Header";
 
         private readonly IOptions<MvcOptions> _mvcOptions;
+        private readonly IPropertyNamingStrategy _propertyNamingStrategy;
 
-        public DiscriminatorModelBinderProvider(IOptions<MvcOptions> mvcOptions)
+        public DiscriminatorModelBinderProvider(IOptions<MvcOptions> mvcOptions, DiscriminatorBinderOptions options)
         {
             _mvcOptions = mvcOptions;
+            _propertyNamingStrategy = options.PropertyNamingStrategy;
         }
 
         public IModelBinder? GetBinder(ModelBinderProviderContext context)
@@ -64,7 +66,7 @@ namespace DiscriminatedBinding.Core
 
             var factory = new ModelBinderFactory(context.MetadataProvider, _mvcOptions, context.Services);
 
-            return new DiscriminatorModelBinder(factory, context.MetadataProvider, discriminator, cases, reader);
+            return new DiscriminatorModelBinder(factory, context.MetadataProvider, discriminator, cases, reader, _propertyNamingStrategy);
         }
 
         private static IDiscriminatorReader? CreateDiscriminatorReader(
