@@ -12,13 +12,9 @@ namespace DiscriminatedBinding.Core.Reader
             var headers = context.Request.Headers;
 
             return Task.FromResult(
-                Fn.GenerateAllPropertyVariates(property)
-                    .Select(it => 
-                        headers.TryGetValue(it, out var discriminatorValue)
-                            ? discriminatorValue.ToString()
-                            : null
-                    )
-                    .FirstOrDefault(it => null != it)
+                headers.TryGetValue(property, out var discriminatorValue)
+                    ? discriminatorValue.ToString()
+                    : null
             );
         }
     }

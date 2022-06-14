@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Threading.Tasks;
-using DiscriminatedBinding.Core.Utility;
 using Microsoft.AspNetCore.Http;
 
 namespace DiscriminatedBinding.Core.Reader
@@ -12,13 +10,9 @@ namespace DiscriminatedBinding.Core.Reader
             var form = context.Request.Form;
 
             return Task.FromResult(
-                Fn.GenerateAllPropertyVariates(property)
-                    .Select(it =>
-                        form.TryGetValue(property, out var discriminatorValue)
-                            ? discriminatorValue.ToString()
-                            : null
-                    )
-                    .FirstOrDefault(it => null != it)
+                form.TryGetValue(property, out var discriminatorValue)
+                    ? discriminatorValue.ToString()
+                    : null
             );
         }
     }
